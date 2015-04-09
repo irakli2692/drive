@@ -1,1 +1,1 @@
-open source paralel drive
+open source parallel drive
