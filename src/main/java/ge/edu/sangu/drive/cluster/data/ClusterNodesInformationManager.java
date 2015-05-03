@@ -5,4 +5,5 @@ package ge.edu.sangu.drive.cluster.data;
  */
 public interface ClusterNodesInformationManager {
 
+
 }
