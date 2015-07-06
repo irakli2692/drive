@@ -7,7 +7,7 @@
     <artifactId>drive</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <kotlin.version>0.11.91.1</kotlin.version>
+        <kotlin.version>0.12.613</kotlin.version>
     </properties>
     <packaging>war</packaging>
     <build>
@@ -95,6 +95,16 @@
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>1.19</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.0.2</version>
         </dependency>
     </dependencies>
 </project>
