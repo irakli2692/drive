@@ -7,8 +7,13 @@ import java.io.File
  * @author Davit Abulashvili
  */
 
-class DBManager {
+class DBManager : DataManager {
+
     val mongoClient = MongoClient("localhost")
+
+    override fun saveFile(file: File?) {
+        throw UnsupportedOperationException()
+    }
 
     fun save() {
         val db = mongoClient.getDB("drive")

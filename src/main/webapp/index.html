@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>File Uploading Form</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <style>
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: red;
+            cursor: inherit;
+            display: block;
+        }
+
+        input[readonly] {
+            background-color: white !important;
+            cursor: text !important;
+        }
+    </style>
+    <script src="jquery-2.1.4.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready(function () {
+            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
+    </script>
+    <script>
+
+        var metadata = []
+
+        function addFormParam() {
+            $('.alert').addClass('hide')
+            var key = document.getElementById("key").value
+            var value = document.getElementById("value").value
+
+            if (!key || !value) {
+                error('არ შეუძლება ცარიელი პარამეტრის დამატება')
+                return
+            }
+
+            var newDiv = document.createElement('div')
+            $(newDiv).addClass('row vertical-divider')
+            newDiv.innerHTML = '<div class="col-xs-5"><input class="form-control" type="text" value="' + key + '" disabled>' +
+                    '</div><div class="col-xs-5">' +
+                    '<input class="form-control" type="text" value="' + key + '" disabled>' +
+                    '</div><div class="col-xs-2"><button type="button" class="btn btn-primary" onclick="deleteFormParam(this)">' +
+                    '<i class="glyphicon glyphicon-minus"></i></button></div>'
+            document.getElementById('props').appendChild(newDiv)
+
+            document.getElementById("key").value = ''
+            document.getElementById("value").value = ''
+            metadata.push({key: key, value: value})
+        }
+
+        function deleteFormParam(button) {
+            button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode)
+        }
+
+        function uploadFile() {
+            $('.alert').addClass('hide')
+            var formData = new FormData()
+            if (!document.getElementById('file').files[0]) {
+                error('ფაილი არაა არჩეული')
+                return
+            }
+            formData.append("file", document.getElementById('file').files[0])
+            for (var i in metadata) {
+                formData.append('key' + i, metadata[i].key)
+                formData.append('value' + i, metadata[i].value)
+            }
+
+            var request = new XMLHttpRequest();
+            request.open("POST", "file/upload");
+            request.send(formData);
+            metadata = []
+        }
+
+        function error(text) {
+            var el = $('.alert')
+            el.removeClass('hide')
+            el.text(text)
+        }
+    </script>
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div id="props" class="container">
+            <div class="row">
+                <div class="col-xs-5">
+                    <input type="text" class="form-control" id="value" placeholder="Value">
+                </div>
+                <div class="col-xs-5">
+                    <input type="text" name="key" class="form-control" id="key" placeholder="Key">
+                </div>
+                <div class="col-xs-2">
+                    <button type="button" class="btn btn-primary" onclick="addFormParam()"><i
+                            class="glyphicon glyphicon-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-10">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-primary btn-file">
+                                Browse<input id="file" type="file">
+                            </span>
+                        </span>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <div class="col-xs-2">
+                    <button class="btn btn-primary" onclick="uploadFile()">Submit</button>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-danger hide" role="alert"></div>
+    </div>
+</div>
+</body>
+</html>
