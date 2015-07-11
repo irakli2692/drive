@@ -26,19 +26,19 @@ WebServlet(name = "Upload", value = "/file/upload")
 MultipartConfig
 public class FileUpload : HttpServlet() {
     override fun doPost(req: HttpServletRequest?, resp: HttpServletResponse?) {
-        val filePart = req?.getPart("file")
-        val fileContent = filePart?.getInputStream();
+        val filePart = req!!.getPart("file")
+        val fileContent = filePart!!.getInputStream()
         println(fileContent)
 
-        val bytes = IOUtils.toByteArray(fileContent);
+        val bytes = IOUtils.toByteArray(fileContent)
+
+        val parameterNames = req.getParameterNames()
         val map = hashMapOf<String, String>()
-        var x = 0
-        while (true) {
-            val key = req?.getParameter("key$x")
-            val value = req?.getParameter("value$x")
-            if (key == null || value == null) break
-            else x++
-            map.put(key, value)
+
+        while (parameterNames!!.hasMoreElements()) {
+            val paramName = parameterNames.nextElement()
+            val paramValues = req.getParameterValues(paramName);
+            map.put(paramName, paramValues[0])
         }
 
         val db = createDataManager()
