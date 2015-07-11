@@ -1,5 +1,10 @@
 package ge.edu.sangu.drive.service
 
+import ge.edu.sangu.drive.data.management.DBManager
+import ge.edu.sangu.drive.data.management.createDataManager
+import org.apache.commons.io.IOUtils
+import java.io.ByteArrayOutputStream
+import java.io.File
 import javax.servlet.annotation.MultipartConfig
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
@@ -21,20 +26,24 @@ WebServlet(name = "Upload", value = "/file/upload")
 MultipartConfig
 public class FileUpload : HttpServlet() {
     override fun doPost(req: HttpServletRequest?, resp: HttpServletResponse?) {
-        val filePart = req?.getPart("file") // Retrieves <input type="file" name="file">
+        val filePart = req?.getPart("file")
         val fileContent = filePart?.getInputStream();
         println(fileContent)
 
+        val bytes = IOUtils.toByteArray(fileContent);
+        val map = hashMapOf<String, String>()
         var x = 0
         while (true) {
             val key = req?.getParameter("key$x")
             val value = req?.getParameter("value$x")
-
-            if (key == null) break
+            if (key == null || value == null) break
             else x++
-            println("(key: $key, value: $value)")
+            map.put(key, value)
         }
-        resp?.getWriter()?.write("files upload")
+
+        val db = createDataManager()
+        db.saveFile(bytes, map)
+        resp?.setStatus(HttpServletResponse.SC_OK)
     }
 }
 
