@@ -26,7 +26,7 @@ WebServlet(name = "Upload", value = "/file/upload")
 MultipartConfig
 public class FileUpload : HttpServlet() {
     override fun doPost(req: HttpServletRequest?, resp: HttpServletResponse?) {
-        val filePart = req!!.getPart("file")
+        val filePart = req!!.getPart("_file")
         val fileContent = filePart!!.getInputStream()
         println(fileContent)
 
@@ -42,8 +42,9 @@ public class FileUpload : HttpServlet() {
         }
 
         val db = createDataManager()
-        db.saveFile(bytes, map)
-        resp?.setStatus(HttpServletResponse.SC_OK)
+        val id = db.saveFile(bytes, map)
+        resp!!.setStatus(HttpServletResponse.SC_OK)
+        resp.getWriter()!!.write(id)
     }
 }
 

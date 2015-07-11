@@ -50,7 +50,8 @@ function uploadFile() {
         error('You must choose file')
         return
     }
-    formData.append("file", files[0])
+    formData.append("_file", files[0])
+    formData.append("_fileName", files[0].name)
     for (var i in metadata) {
         formData.append(i, metadata[i])
     }
@@ -64,6 +65,7 @@ function uploadFile() {
         cache: false,
         processData: false,
         success: function (data, textStatus, jqXHR) {
+            console.log(jqXHR.responseText)
             var file = $("#file")
             file.replaceWith(file.clone())
             $("#fileText").val('')

@@ -8,5 +8,5 @@ import java.io.File
 
 public interface DataManager {
 
-    public fun saveFile(file: ByteArray, meta: Map<String, String>)
+    public fun saveFile(file: ByteArray, meta: Map<String, String>) : String
 }
