@@ -51,7 +51,6 @@ function uploadFile() {
         return
     }
     formData.append("_file", files[0])
-    formData.append("_fileName", files[0].name)
     for (var i in metadata) {
         formData.append(i, metadata[i])
     }

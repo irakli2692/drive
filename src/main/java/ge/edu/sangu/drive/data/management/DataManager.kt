@@ -1,6 +1,6 @@
 package ge.edu.sangu.drive.data.management
 
-import java.io.File
+import org.bson.Document
 
 /**
  * @author Davit Abulashvili
@@ -8,5 +8,7 @@ import java.io.File
 
 public interface DataManager {
 
-    public fun saveFile(file: ByteArray, meta: Map<String, String>) : String
+    public fun saveFile(info: Map<String, Any>, meta: Map<String, String>): String
+
+    public fun getFiles(): List<Document?>
 }
