@@ -33,7 +33,6 @@ public class FileUpload : HttpServlet() {
     override fun doPost(req: HttpServletRequest?, resp: HttpServletResponse?) {
         val filePart = req!!.getPart("_file")
         val fileContent = filePart!!.getInputStream()
-        println(fileContent)
 
         val bytes = IOUtils.toByteArray(fileContent)
         val fileName = getFileName(filePart)
