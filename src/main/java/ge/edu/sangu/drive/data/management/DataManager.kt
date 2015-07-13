@@ -11,4 +11,6 @@ public interface DataManager {
     public fun saveFile(info: Map<String, Any>, meta: Map<String, String>): String
 
     public fun getFiles(): List<Document?>
+
+    public fun getFileById(fileId : String): Document
 }
